@@ -12,6 +12,7 @@ from .csharp import CSharpHandler
 from .ruby import RubyHandler
 from .ts import TypeScriptHandler
 from .intercal import IntercalHandler
+from .sh import ShHandler
 
 class LanguageHandler:
     def __init__(self, compiler):
@@ -27,7 +28,8 @@ class LanguageHandler:
             'cs': CSharpHandler(compiler),
             'ruby': RubyHandler(compiler),
             'ts': TypeScriptHandler(compiler),
-            'intercal': IntercalHandler(compiler)
+            'intercal': IntercalHandler(compiler),
+            'sh': ShHandler(compiler),
         }
 
     def run_language_block(self, lang, lines):

@@ -2,7 +2,7 @@
 import subprocess
 import tempfile
 import os
-from ..utils.colors import Colors
+from utils.colors import Colors
 from .base import BaseLanguageHandler
 
 class IntercalHandler(BaseLanguageHandler):

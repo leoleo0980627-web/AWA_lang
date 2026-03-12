@@ -1,12 +1,14 @@
+import sys; import os; sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+import sys; sys.path.insert(0, "/data/data/com.termux/files/home")
 #!/usr/bin/env python3
 # ~/awa/awa.py
 # AWA Language - Main Entry Point
 
 import sys
 
-from .core.compiler import AwaCompiler
-from .core.executor import Executor
-from .utils.colors import Colors, color_print
+from core.compiler import AwaCompiler
+from core.executor import Executor
+from utils.colors import Colors, color_print
 
 def main():
     if len(sys.argv) != 2:

@@ -5,7 +5,7 @@ import re
 import time
 import random
 
-from ..utils.colors import Colors
+from utils.colors import Colors
 
 class Executor:
     def __init__(self, compiler):

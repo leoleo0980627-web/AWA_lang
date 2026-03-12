@@ -8,13 +8,13 @@ import time
 import random
 import re
 
-from ..utils.colors import Colors, color_print, error_print
-from ..utils.helpers import check_holidays, set_birthday, random_fortune
+from utils.colors import Colors, color_print, error_print
+from utils.helpers import check_holidays, set_birthday, random_fortune
 from .scope import ScopeManager
 from .politeness import PolitenessManager
-from ..easter.eggs import EasterEggs
-from ..lang import LanguageHandler  # 從 __init__ 導入
-from ..shared.storage import SharedStorage
+from easter.eggs import EasterEggs
+from lang import LanguageHandler  # 從 __init__ 導入
+from shared.storage import SharedStorage
 
 class AwaCompiler:
     def __init__(self):
