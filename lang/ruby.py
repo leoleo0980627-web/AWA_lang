@@ -1,0 +1,60 @@
+# ~/awa/lang/ruby.py
+import subprocess
+import tempfile
+import os
+import json
+from .base import BaseLanguageHandler
+
+class RubyHandler(BaseLanguageHandler):
+    def run(self, lines):
+        # 讀 Python 的共享變數（已轉換布林值為字串）
+        shared_vars = self.shared.import_to_other('py')
+        
+        # 轉成 Ruby Hash 字串
+        shared_hash = self._to_ruby_hash(shared_vars)
+        
+        code = f"$shared = {shared_hash}\n\n"
+        code += '\n'.join(lines)
+        
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.rb', delete=False) as f:
+            f.write(code)
+            f.flush()
+            try:
+                result = subprocess.run(['ruby', f.name], capture_output=True, text=True, timeout=5)
+                if result.stdout:
+                    print(result.stdout, end='')
+                if result.stderr:
+                    self.error(f"Ruby stderr: {result.stderr.strip()}")
+            except FileNotFoundError:
+                self.error("Ruby not installed")
+            except subprocess.TimeoutExpired:
+                self.error("Ruby timeout")
+            finally:
+                os.unlink(f.name)
+
+    def _to_ruby_hash(self, d):
+        if not d:
+            return "{}"
+        items = []
+        for k, v in d.items():
+            items.append(f":{k} => {self._to_ruby_literal(v)}")
+        return "{" + ", ".join(items) + "}"
+    def _to_ruby_literal(self, value):
+        if isinstance(value, (int, float)):
+            return str(value)
+        elif isinstance(value, bool):
+            return str(value).lower()
+        elif isinstance(value, str):
+            if value == "true":
+                return "true"
+            elif value == "false":
+                return "false"
+            return f'"{value}"'
+        elif isinstance(value, list):
+            items = [self._to_ruby_literal(x) for x in value]
+            return "[" + ", ".join(items) + "]"
+        elif isinstance(value, dict):
+            return self._to_ruby_hash(value)
+        else:
+            return "nil"
+
